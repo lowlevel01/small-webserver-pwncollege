@@ -1,6 +1,7 @@
 .intel_syntax noprefix
 .globl _start
 
+
 .section .bss
 socket_fd:
     .space 8 # socket file descriptor
@@ -49,7 +50,9 @@ _start:
     test rax, rax
     js exit                   # Exit if syscall failed
 
+accept:
     # Accept connection
+    mov rdi, [socket_fd]
     xor rsi, rsi              # addr parameter (NULL)
     xor rdx, rdx              # addrlen parameter (0)
     mov rax, 43               # SYS_accept
@@ -136,6 +139,7 @@ send_response:
     mov rax, 3                # SYS_close
     syscall
 
+    jmp accept
 exit:
     # Exit program
     xor rdi, rdi              # Exit code 0
