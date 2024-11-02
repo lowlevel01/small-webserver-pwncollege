@@ -11,7 +11,8 @@ file_fd:
     .space 8 # file file descriptor
 file_size:
     .space 8  # to register file size
-
+is_child:
+    .space 8   # to store fork's return value
 
 .section .text
 
@@ -64,6 +65,16 @@ accept:
 
     # Save client socket file descriptor
     mov [client_fd], rax
+
+here_we_fork:
+    mov rax,57
+    syscall   # fork
+    mov [is_child], rax
+    cmp byte ptr [is_child], 0
+    jne close_client
+    mov rdi, [socket_fd]              # Client socket file descriptor
+    mov rax, 3                # SYS_close
+    syscall
 
     # Read request
     lea rsi, [request_buffer] # Request buffer
@@ -134,18 +145,19 @@ send_response:
     mov rax, 1                # SYS_write
     syscall
 
-    # Close client socket
-    mov rdi, [client_fd]              # Client socket file descriptor
-    mov rax, 3                # SYS_close
-    syscall
 
-    jmp accept
+
 exit:
     # Exit program
     xor rdi, rdi              # Exit code 0
     mov rax, 60               # SYS_exit
     syscall
 
+close_client:
+    mov rdi, [client_fd]              # Client socket file descriptor
+    mov rax, 3                # SYS_close
+    syscall
+    jmp accept
 
 
 .section .data
@@ -164,3 +176,4 @@ request_buffer:
 
 file_buffer:
     .space 1024
+
