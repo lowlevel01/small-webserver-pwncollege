@@ -1,10 +1,6 @@
 .intel_syntax noprefix
 .globl _start
 
-
-
-
-
 .section .bss
 socket_fd:
     .space 8 # socket file descriptor
@@ -14,6 +10,8 @@ file_fd:
     .space 8 # file file descriptor
 file_size:
     .space 8  # to register file size
+
+
 .section .text
 
 _start:
@@ -143,6 +141,8 @@ exit:
     xor rdi, rdi              # Exit code 0
     mov rax, 60               # SYS_exit
     syscall
+
+
 
 .section .data
 sockaddr_in:
