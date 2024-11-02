@@ -8,5 +8,5 @@ This is my progress of going through pwn.college webserver in assembly challenge
 
 # Funcionalities
 
-1- Reads and responds to GET http requests
+1- Reads and responds to GET http requests <br>
 2- Has multiprocessing
