@@ -72,7 +72,7 @@ here_we_fork:
     mov [is_child], rax
     cmp byte ptr [is_child], 0
     jne close_client
-    mov rdi, [socket_fd]              # Client socket file descriptor
+    mov rdi, [socket_fd]              # socket file descriptor
     mov rax, 3                # SYS_close
     syscall
 
